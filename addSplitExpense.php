@@ -22,6 +22,8 @@ $payer_id = $data->payer_id;
 $amount = $data->amount;
 $user_share = $data->user_share;
 $friend_share = $data->friend_share;
+$expense_name = $data->expense_name;
+$expense_category = $data->expense_category;
 $description = $data->description;
 $status = $data->status;
 $date_created = date('Y-m-d H:i:s');
@@ -34,12 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response['success'] = false;
         $response['message'] = 'Please fill in all required fields.';
     } else {
-        $stmt = $mysqli->prepare("INSERT INTO splitexpenses (user_id, friend_id,payer_id, amount, user_share, friend_share, description,status,date_created) VALUES (?, ?, ?, ?, ?, ?, ?,?,?)");
+        $stmt = $mysqli->prepare("INSERT INTO splitexpenses (user_id, friend_id,payer_id, amount, user_share, friend_share,expense_name,category, description,status,date_created) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)");
         if ($stmt === false) {
             $response['success'] = false;
             $response['message'] = 'Prepare failed: ' . $mysqli_error;
         } else {
-            $stmt->bind_param("iiidddsss", $user_id, $friend_id, $payer_id, $amount, $user_share, $friend_share, $description, $status, $date_created);
+            $stmt->bind_param("iiidddsssss", $user_id, $friend_id, $payer_id, $amount, $user_share, $friend_share, $expense_name, $expense_category, $description, $status, $date_created);
             if ($stmt->execute()) {
                 $response['success'] = true;
                 $response['message'] = 'Split Expense added successfully.';
