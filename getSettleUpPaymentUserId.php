@@ -16,6 +16,12 @@ if ($mysqli->connect_error) {
 $response = array();
 
 $user_id = $_GET['user_id'] ?? null;
+$friend_id = $_GET['friend_id'] ?? null;
+
+if (!$friend_id) {
+    echo json_encode(["success" => false, "message" => "Friend ID is required."]);
+    exit;
+}
 
 if (!$user_id) {
     echo json_encode(["success" => false, "message" => "User ID is required."]);
@@ -26,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $query = "SELECT s.id, u.user_id, u.username AS payer_name, s.amount, s.created_at, s.status
 FROM settleup_payment s
 JOIN user u ON s.user_id = u.user_id
-WHERE s.user_id = ?;
+WHERE s.user_id = ? AND s.receiver_id = ?;
 ";
 
     if ($stmt = $mysqli->prepare($query)) {
-        $stmt->bind_param("i", $user_id);
+        $stmt->bind_param("ii", $user_id, $friend_id);
         $stmt->execute();
         $result = $stmt->get_result();
 
