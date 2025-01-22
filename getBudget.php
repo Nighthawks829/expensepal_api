@@ -27,7 +27,7 @@ if (isset($_GET['user_id'])) {
 	exit;
 }
 
-$query = "SELECT budget_name AS budgetName, amount AS budgetAmount, categories, notification_percentage FROM budgets WHERE user_id = ?";
+$query = "SELECT budget_name AS budgetName, amount AS budgetAmount, categories, notification_percentage,end_date FROM budgets WHERE user_id = ?";
 $stmt = $mysqli->prepare($query);
 
 if (!$stmt) {

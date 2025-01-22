@@ -18,13 +18,13 @@ if ($data && isset($data->username) && isset($data->password)) {
 	$username = $mysqli->real_escape_string($data->username);
 	$password = $data->password;
 	
-	$stmt = $mysqli->prepare("SELECT user_id, username, email, password FROM user WHERE username = ?");
+	$stmt = $mysqli->prepare("SELECT user_id, username, email, password,file_name FROM user WHERE username = ?");
 	$stmt->bind_param("s", $username);
 	$stmt->execute();
 	$stmt->store_result();
 	
 	if($stmt->num_rows > 0) {
-		$stmt->bind_result($user_id, $username, $email, $hashedPassword);
+		$stmt->bind_result($user_id, $username, $email, $hashedPassword,$file_name);
 		$stmt->fetch();
 		
 		if (password_verify($password, $hashedPassword)) {
@@ -35,7 +35,8 @@ if ($data && isset($data->username) && isset($data->password)) {
 			$response['user'] = array(
 				'user_id' => $user_id,
 				'username' => $username,
-				'email' => $email
+				'email' => $email,
+				'file_name'=>$file_name
 			);
 		} else {
 			$response['success'] = false;
