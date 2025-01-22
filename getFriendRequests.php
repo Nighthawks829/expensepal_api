@@ -20,6 +20,25 @@ if (!$user_id) {
 	exit;
 }
 
+// $query = "
+// SELECT 
+// 	notifications.noti_id,
+// 	notifications.message,
+// 	user.username AS sender_username,
+// 	friends.friendship_id AS friendship_id
+// FROM
+// 	notifications
+// JOIN
+// 	friends
+// ON
+// 	notifications.user_id = friends.friend_id
+// JOIN 
+//     user 
+// ON 
+//     friends.user_id = user.user_id
+// WHERE
+// 	friends.status = 'pending' AND notifications.user_id = ?
+// ";
 $query = "
 SELECT 
 	notifications.noti_id,
@@ -37,7 +56,7 @@ JOIN
 ON 
     friends.user_id = user.user_id
 WHERE
-	friends.status = 'pending' AND notifications.user_id = ?
+	notifications.user_id = ?
 ";
 
 $stmt = $mysqli->prepare($query);
